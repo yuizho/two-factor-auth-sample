@@ -23,8 +23,28 @@ public class MyResource {
             throws InterruptedException, ExecutionException {
         GoogleAuthenticator gAuth = new GoogleAuthenticator();
         final GoogleAuthenticatorKey key = gAuth.createCredentials(userName);
-        return String.format("<html><body><h1>otpauth://totp/%s?secret=%s&issuer=two-factor-auth-sample</h1></body></html>",
-                userName, key.getKey());
+        String qr = String.format("otpauth://totp/%s?secret=%s&issuer=two-factor-auth-sample", userName, key.getKey());
+        return "<html>"
+                + "<head>"
+                + "<script type=\"text/javascript\" src= \"https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.3.1/qrcode.min.js\"></script>"
+                + "</head>"
+                + "<body>"
+                + "<h2>"
+                + "QRCode to register Google Authenticator"
+                + "</h2>"
+                + "<p>"
+                + qr
+                + "</p>"
+                + "<div id=\"qrcode\"></div>"
+                + "<script type=\"text/javascript\">"
+                + "(function(){"
+                + "var qr = qrcode(0, 'L');"
+                + "qr.addData('" + qr + "');"
+                + "qr.make();"
+                + "document.getElementById('qrcode').innerHTML = qr.createImgTag(6, 24);"
+                + "}());"
+                + "</script>"
+                + "</body></html>";
     }
 
     @GET
